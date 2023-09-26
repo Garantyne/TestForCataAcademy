@@ -15,7 +15,7 @@ func main() {
 	/*num1, num2 := getDigit(arifmetic)
 	fmt.Println(getSign(arifmetic))
 	fmt.Println(calculator(num1, num2, getSign(arifmetic)))*/
-	num1, num2 := decipheringRomanNumerals(arifmetic)
+	num1, num2 := decipheringNumerals(arifmetic)
 	fmt.Println(calculator(num1, num2, getSign(arifmetic)))
 
 }
@@ -72,9 +72,12 @@ func calculator(num1, num2 int, sign string) int {
 }
 
 // расшифровка римских цифр
-func decipheringRomanNumerals(arifmet string) (int, int) {
+func decipheringNumerals(arifmet string) (int, int) {
 	arifmet = strings.TrimSpace(arifmet)
 	signIndex := strings.Index(arifmet, getSign(arifmet))
+	if signIndex < 1 {
+		panic("Вывод ошибки, так как строка не является математической операцией.")
+	}
 	str1 := arifmet[:signIndex]
 	str1 = strings.TrimSpace(str1)
 	str2 := arifmet[signIndex+1:]
@@ -85,11 +88,63 @@ func decipheringRomanNumerals(arifmet string) (int, int) {
 	if isRomeSystem1 && isArabSystem2 || isRomeSystem2 && isArabSystem1 {
 		panic("Разные системы счисления, аварийное завершение")
 	}
-	if (isRomeSystem2 && isRomeSystem1) && num1 < num2 {
+	if (isRomeSystem2 && isRomeSystem1) && num1 < num2 && getSign(arifmet) == "-" {
 		panic("Аварийное завершение в римской системе небыло отрицательных чисел")
 	}
 
+	if isRomeSystem1 && isRomeSystem2 {
+		showRomeDigitAnswer(num1, num2, arifmet)
+	}
+
 	return num1, num2
+}
+
+func showRomeDigitAnswer(num1 int, num2 int, arifmet string) {
+	result := calculator(num1, num2, getSign(arifmet))
+	if result == 1 {
+		fmt.Println("I")
+
+	} else if result == 2 {
+		fmt.Println("II")
+	} else if result == 3 {
+		fmt.Println("III")
+	} else if result == 4 {
+		fmt.Println("IV")
+	} else if result == 5 {
+		fmt.Println("V")
+	} else if result == 6 {
+		fmt.Println("VI")
+	} else if result == 7 {
+		fmt.Println("VII")
+	} else if result == 8 {
+		fmt.Println("VIII")
+	} else if result == 9 {
+		fmt.Println("IX")
+	} else if result == 10 {
+		fmt.Println("IX")
+	} else if result == 11 {
+		fmt.Println("XI")
+	} else if result == 12 {
+		fmt.Println("XII")
+	} else if result == 13 {
+		fmt.Println("XII")
+	} else if result == 14 {
+		fmt.Println("XIV")
+	} else if result == 15 {
+		fmt.Println("XV")
+	} else if result == 16 {
+		fmt.Println("XVI")
+	} else if result == 17 {
+		fmt.Println("XVII")
+	} else if result == 18 {
+		fmt.Println("XVIII")
+	} else if result == 19 {
+		fmt.Println("XIX")
+	} else if result == 20 {
+		fmt.Println("XX")
+	} else {
+		fmt.Println("Некорректное число")
+	}
 }
 
 func parseDigit(digit string) (int, bool, bool) {
@@ -131,7 +186,9 @@ func parseDigit(digit string) (int, bool, bool) {
 		num1, err = strconv.Atoi(digit)
 		isArabSystem = true
 		if err != nil {
-			fmt.Println("Ошибка преобразования строки в число:", err)
+			fmt.Println("Вывод ошибки, так как формат математической "+
+				"операции не удовлетворяет заданию — два операнда и один "+
+				"оператор (+, -, /, *).\n\n", err)
 			panic("Ошибка")
 		}
 	}
