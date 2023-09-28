@@ -19,32 +19,6 @@ func main() {
 	fmt.Println(calculator(num1, num2, getSign(arifmetic)))
 
 }
-func getDigit(arifmet string) (int, int) {
-	//удаляем все пробелы если вдруг их ввели
-	arifmet = strings.TrimSpace(arifmet)
-	signIndex := strings.Index(arifmet, getSign(arifmet))
-	str1 := arifmet[:signIndex]
-	str1 = strings.TrimSpace(str1)
-	str2 := arifmet[signIndex+1:]
-	str2 = strings.TrimSpace(str2)
-	//подготавливаем числа которыре будем извлекать из строк
-	var number1 int
-	var number2 int
-	if signIndex != -1 {
-		var err error
-		number1, err = strconv.Atoi(str1)
-		if err != nil {
-			fmt.Println("Ошибка преобразования строки в число:", err)
-			return number1, number2
-		}
-		number2, err = strconv.Atoi(str2)
-		if err != nil {
-			fmt.Println("Ошибка преобразования строки в число:", err)
-			return number1, number2
-		}
-	}
-	return number1, number2
-}
 
 // получаем знак
 func getSign(arifmet string) string {
@@ -101,50 +75,42 @@ func decipheringNumerals(arifmet string) (int, int) {
 
 func showRomeDigitAnswer(num1 int, num2 int, arifmet string) {
 	result := calculator(num1, num2, getSign(arifmet))
-	if result == 1 {
-		fmt.Println("I")
-
-	} else if result == 2 {
-		fmt.Println("II")
-	} else if result == 3 {
-		fmt.Println("III")
-	} else if result == 4 {
-		fmt.Println("IV")
-	} else if result == 5 {
-		fmt.Println("V")
-	} else if result == 6 {
-		fmt.Println("VI")
-	} else if result == 7 {
-		fmt.Println("VII")
-	} else if result == 8 {
-		fmt.Println("VIII")
-	} else if result == 9 {
-		fmt.Println("IX")
+	var num3 int
+	var str string
+	num3 += result % 10
+	result /= 10
+	if result < 5 {
+		for i := 0; i < result; i++ {
+			str += "X"
+		}
+	} else if result < 9 {
+		str = "L"
+		for i := 5; i < result; i++ {
+			str += "X"
+		}
 	} else if result == 10 {
-		fmt.Println("IX")
-	} else if result == 11 {
-		fmt.Println("XI")
-	} else if result == 12 {
-		fmt.Println("XII")
-	} else if result == 13 {
-		fmt.Println("XII")
-	} else if result == 14 {
-		fmt.Println("XIV")
-	} else if result == 15 {
-		fmt.Println("XV")
-	} else if result == 16 {
-		fmt.Println("XVI")
-	} else if result == 17 {
-		fmt.Println("XVII")
-	} else if result == 18 {
-		fmt.Println("XVIII")
-	} else if result == 19 {
-		fmt.Println("XIX")
-	} else if result == 20 {
-		fmt.Println("XX")
-	} else {
-		fmt.Println("Некорректное число")
+		str = "LL"
 	}
+	if num3 == 1 {
+		str += "I"
+	} else if num3 == 2 {
+		str += "II"
+	} else if num3 == 3 {
+		str += "III"
+	} else if num3 == 4 {
+		str += "IV"
+	} else if num3 == 5 {
+		str += "V"
+	} else if num3 == 6 {
+		str += "VI"
+	} else if num3 == 7 {
+		str += "VII"
+	} else if num3 == 8 {
+		str += "VIII"
+	} else if num3 == 9 {
+		str += "IX"
+	}
+	fmt.Println(str)
 }
 
 func parseDigit(digit string) (int, bool, bool) {
@@ -184,6 +150,9 @@ func parseDigit(digit string) (int, bool, bool) {
 	} else {
 		var err error
 		num1, err = strconv.Atoi(digit)
+		if num1 < 0 || num1 > 10 {
+			panic("Вы ввели некорректное число ")
+		}
 		isArabSystem = true
 		if err != nil {
 			fmt.Println("Вывод ошибки, так как формат математической "+
